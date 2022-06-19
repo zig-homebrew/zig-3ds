@@ -15,8 +15,9 @@ pub fn build(b: *std.build.Builder) void {
     obj.addIncludeDir(devkitpro ++ "/libctru/include");
     obj.addIncludeDir(devkitpro ++ "/portlibs/3ds/include");
     obj.setTarget(.{
-        .cpu_arch = .thumb,
+        .cpu_arch = .arm,
         .os_tag = .freestanding,
+        .abi = .eabihf,
         .cpu_model = .{ .explicit = &std.Target.arm.cpu.mpcore },
     });
     obj.setBuildMode(mode);
@@ -27,7 +28,7 @@ pub fn build(b: *std.build.Builder) void {
         "-g",
         "-march=armv6k",
         "-mtune=mpcore",
-        "-mfloat-abi=soft",
+        "-mfloat-abi=hard",
         "-mtp=soft",
         "-Wl,-Map,zig-out/zig-3ds.map",
         "-specs=" ++ devkitpro ++ "/devkitARM/arm-none-eabi/lib/3dsx.specs",
@@ -43,7 +44,6 @@ pub fn build(b: *std.build.Builder) void {
         devkitpro ++ "/tools/bin/3dsxtool" ++ extension,
         "zig-out/zig-3ds.elf",
         "zig-out/zig-3ds.3dsx",
-        "--smdh=zig-out/zig-3ds.smdh",
     });
     dsx.stdout_action = .ignore;
 
